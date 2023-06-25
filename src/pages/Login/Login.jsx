@@ -14,6 +14,7 @@ const Login = () => {
 
     const email = e.target.elements?.email.value.trim();
     const password = e.target.elements?.password.value.trim();
+    console.dir(e.target);
 
     if (!email || !password) {
       Notify.failure('Enter valid credentials');
