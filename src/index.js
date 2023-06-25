@@ -11,7 +11,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter basename="/goit-react-hw-07-phonebook-createAsyncThunk-builder-callback">
+    <BrowserRouter basename="/goit-react-hw-08-phonebook-Auth">
       <Provider store={store}>
         <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
           <App />

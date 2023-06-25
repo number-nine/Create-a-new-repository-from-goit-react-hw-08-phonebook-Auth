@@ -1,45 +1,41 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+
 import * as contactsAPI from 'redux/contactOperations';
 import {
-  selectAuth,
   selectVisibleContacts,
 } from 'redux/selectors';
 
 import {
   ListWrapper,
-  PrivateContact,
-  SharedContact,
 } from './ContactsList.styled';
 import { Button } from '../common.styled';
 
 
 const ContactsList = () => {
-  const { isLoggedIn } = useSelector(selectAuth);
   const visibleContacts = useSelector(selectVisibleContacts);
   const dispatch = useDispatch();
+
+   useEffect(() => {
+     dispatch(contactsAPI.getAllContacts());
+   }, [dispatch]);
 
   return visibleContacts.length === 0 ? (
     <p>Nothing to show</p>
   ) : (
     <ListWrapper>
-      {visibleContacts.map(({ id, name, phone, isPrivate }) => {
+      {visibleContacts.map(({ id, name, number }) => {
         return (
           <li key={id}>
-            {name}: {phone}
-            {isLoggedIn &&
-              (isPrivate ? (
-                <PrivateContact>private</PrivateContact>
-              ) : (
-                <SharedContact>shared</SharedContact>
-              ))}
-            {isLoggedIn && (
+            {name}: {number}
+          
               <Button
                 type="button"
                 onClick={() => dispatch(contactsAPI.deleteContactById(id))}
               >
                  Delete
               </Button>
-            )}
+            
           </li>
         );
       })}

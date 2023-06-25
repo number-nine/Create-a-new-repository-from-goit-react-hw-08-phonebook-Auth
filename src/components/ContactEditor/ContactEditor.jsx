@@ -6,7 +6,6 @@ import * as contactsAPI from 'redux/contactOperations';
 import {
   FormStyled,
   LabelStyled,
-  LabelStyledChk,
   FieldStyled,
   Error,
 } from './ContactEditor.styled';
@@ -25,14 +24,14 @@ const validate = values => {
       "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan";
   }
 
-  if (!values.phone) {
-    errors.phone = 'Required';
+  if (!values.number) {
+    errors.number = 'Required';
   } else if (
     !/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/i.test(
-      values.phone
+      values.number
     )
   ) {
-    errors.phone =
+    errors.number =
       'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +';
   }
 
@@ -45,8 +44,7 @@ const ContactEditor = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      phone: '',
-      isPrivate: true,
+      number: '',
     },
     validate,
     validateOnChange: false,
@@ -76,24 +74,14 @@ const ContactEditor = () => {
         Phone number
         <FieldStyled
           type="tel"
-          name="phone"
+          name="number"
           onChange={formik.handleChange}
-          value={formik.values.phone}
+          value={formik.values.number}
         />
       </LabelStyled>
-      {formik.touched.phone && formik.errors.phone ? (
-        <Error>{formik.errors.phone}</Error>
+      {formik.touched.number && formik.errors.number ? (
+        <Error>{formik.errors.number}</Error>
       ) : null}
-
-      <LabelStyledChk>
-        Private contact
-        <input
-          type="checkbox"
-          name="isPrivate"
-          onChange={formik.handleChange}
-          checked={formik.values.isPrivate}
-        />
-      </LabelStyledChk>
       <Button type="submit">Add contact</Button>
     </FormStyled>
   );

@@ -4,12 +4,16 @@ import { useEffect } from 'react';
 import { Notify } from 'notiflix';
 
 import SharedLayout from 'components/SharedLayout';
-import Home from 'pages/Home';
+import Phonebook from 'pages/Phonebook';
 import Dashboard from 'pages/Dashboard';
-import * as contactsAPI from 'redux/contactOperations';
+import { authApi } from 'redux/authOperations';
+// import * as contactsAPI from 'redux/contactOperations';
 import { selectAuth, selectIsLoading, selectError } from 'redux/selectors';
 import SplashScreen from 'components/SplashScreen';
-
+import Login from 'pages/Login';
+import SignUp from 'pages/SignUp';
+import { RestrictedRoute } from 'components/RestrictedRoute'
+import { PrivateRoute } from 'components/PrivateRoute';
 
 
 export default function App() {
@@ -19,16 +23,28 @@ export default function App() {
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
 
-
-   useEffect(() => {
-     dispatch(contactsAPI.getAllContacts());
-   }, [dispatch]);
+  useEffect(() => {
+    dispatch(authApi.refresh());
+  }, [dispatch]);
 
   return (
     <>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route index element={<Home />} />
+          <Route
+            index
+            element={
+              <RestrictedRoute redirectTo="/phonebook" component={<Login />} />
+            }
+          />
+          <Route
+            path="signup"
+            element={
+              <RestrictedRoute redirectTo="/phonebook" component={<SignUp />} />
+            }
+          />
+          <Route path="phonebook" element={<PrivateRoute redirectTo="/" component={<Phonebook />}/>} />
+
           <Route
             path="dashboard"
             element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />}
@@ -36,7 +52,7 @@ export default function App() {
         </Route>
         <Route path="*" element={<div>Not Found</div>} />
       </Routes>
-      {isLoading && <SplashScreen />}
+      {/* {isLoading && <SplashScreen />} */}
       {error && Notify.info(error)}
     </>
   );

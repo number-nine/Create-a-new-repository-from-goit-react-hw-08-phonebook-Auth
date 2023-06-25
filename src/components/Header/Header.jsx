@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { NavLinkStyled, HeaderStyled } from './Header.styled';
 import { selectAuth } from 'redux/selectors';
 
-import LoginForm from 'components/LoginForm';
+import UserMenu from 'components/UserMenu';
 
 export default function Header() {
   const { isLoggedIn } = useSelector(selectAuth);
@@ -10,10 +10,12 @@ export default function Header() {
   return (
     <HeaderStyled>
       <nav>
-        <NavLinkStyled to="/">Home</NavLinkStyled>
+        {!isLoggedIn && <NavLinkStyled to="/">Login</NavLinkStyled>}
+        {!isLoggedIn && <NavLinkStyled to="/signup">Register</NavLinkStyled>}
+        {isLoggedIn && <NavLinkStyled to="/phonebook">Phonebook</NavLinkStyled>}
         {isLoggedIn && <NavLinkStyled to="/dashboard">Dashboard</NavLinkStyled>}
       </nav>
-      <LoginForm />
+      {isLoggedIn && <UserMenu />}
     </HeaderStyled>
   );
 }
